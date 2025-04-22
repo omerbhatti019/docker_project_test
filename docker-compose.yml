@@ -1,15 +1,22 @@
+version: '3'
 services:
-  web:
-    build: .
-    ports:
-      - "5010:5000"
-    depends_on:
-      - redis
+  redis:
+    image: redis
+    container_name: redis
+    networks:
+      - appnet
+
+  app:
+    image: omer019/my-python-app:latest
+    container_name: app
     environment:
       - REDIS_HOST=redis
-      - REDIS_PORT=6379
-
-  redis:
-    image: redis:latest
     ports:
-      - "6379:6379"
+      - "5000:5000"
+    depends_on:
+      - redis
+    networks:
+      - appnet
+
+networks:
+  appnet:
